@@ -4,16 +4,16 @@ import styles from './Registration.module.css'
 
 export const Registration = () => {
     const [userDetails, setUserDetails] = useState({
-        userName: "",
-        userMail: "",
-        userMobile: "",
+        username: "",
+        email: "",
+        mobile: "",
         password: "",
         cnfrmPassword: ""
     })
     const [errors, setErrors] = useState({
-        userName: "e",
-        userMail: "e",
-        userMobile: "e",
+        username: "e",
+        email: "e",
+        mobile: "e",
         password: "e",
         cnfrmPassword: "e",
     })
@@ -33,21 +33,36 @@ export const Registration = () => {
 
         setErrors({
             ...errors,
-            userName: userDetails.userName,
-            userMail: userDetails.userMail,
-            userMobile: userDetails.userMobile,
+            username: userDetails.username,
+            email: userDetails.email,
+            mobile: userDetails.mobile,
             password: userDetails.password,
             cnfrmPassword: userDetails.cnfrmPassword
         });
 
-        if (userDetails.userName.trim() == "" || userDetails.userMail.trim() == "" || userDetails.userMobile.trim() == "" || userDetails.password.trim() == "" || userDetails.cnfrmPassword.trim() == "" || userDetails.password.trim() != userDetails.cnfrmPassword.trim()) {
-            console.log("")
+        if (userDetails.username.trim() == "" || userDetails.email.trim() == "" || userDetails.mobile.trim() == "" || userDetails.password.trim() == "" || userDetails.cnfrmPassword.trim() == "" || userDetails.password.trim() != userDetails.cnfrmPassword.trim()) {
         }
         else {
-            console.log(userDetails)
+            // deleting the confirm password propety;
+            delete userDetails.cnfrmPassword;
+
+            // posting the userdetails to server via REST api
+            let result = await fetch('https://get-up-4-change.herokuapp.com/signup', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userDetails)
+            })
+            result = await result.json();
+
+            if (result.status) { // if submitted successfully
+                alert(result.message);
+                navigate('/login')
+            } else {
+                alert('Something went wrong!');
+            }
         }
-
-
 
     }
 
@@ -59,19 +74,19 @@ export const Registration = () => {
                         <p>Signup Page</p>
                     </div>
                     <div className={styles.userDiv}>
-                        <label className={styles.form__label} htmlFor="userName">User Name </label>
-                        <input type="text" className='userName' onChange={handleOnChange} errorMessage />
-                        <div className={styles.errorDiv} hidden={errors.userName.trim() == "" ? false : true}>user name is mandatory!</div>
+                        <label className={styles.form__label} htmlFor="username">User Name </label>
+                        <input type="text" className='username' onChange={handleOnChange} errorMessage />
+                        <div className={styles.errorDiv} hidden={errors.username.trim() == "" ? false : true}>user name is mandatory!</div>
                     </div>
                     <div className={styles.emailDiv}>
-                        <label className={styles.form__label} htmlFor="userMail">Email </label>
-                        <input type="text" className='userMail' onChange={handleOnChange} />
-                        <div className={styles.errorDiv} hidden={errors.userMail.trim() == "" ? false : true}>email is mandatory!</div>
+                        <label className={styles.form__label} htmlFor="email">Email </label>
+                        <input type="text" className='email' onChange={handleOnChange} />
+                        <div className={styles.errorDiv} hidden={errors.email.trim() == "" ? false : true}>email is mandatory!</div>
                     </div>
                     <div className={styles.phoneDiv}>
-                        <label className={styles.form__label} htmlFor="userMobile">Mobile Number </label>
-                        <input type="text" className='userMobile' onChange={handleOnChange} />
-                        <div className={styles.errorDiv} hidden={errors.userMobile.trim() == "" ? false : true}>mobile number is mandatory!</div>
+                        <label className={styles.form__label} htmlFor="mobile">Mobile Number </label>
+                        <input type="text" className='mobile' onChange={handleOnChange} />
+                        <div className={styles.errorDiv} hidden={errors.mobile.trim() == "" ? false : true}>mobile number is mandatory!</div>
                     </div>
                     <div className={styles.pwdDiv}>
                         <label className={styles.form__label} htmlFor="password">Password </label>

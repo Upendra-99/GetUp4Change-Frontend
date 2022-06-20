@@ -8,7 +8,7 @@ const AllRoutes = () => {
     return (
         <div>
             <Routes>
-                <Route path="/" element={<HomeRoute />} />
+                <Route path="/:id" element={<HomeRoute />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Registration />} />
             </Routes>
